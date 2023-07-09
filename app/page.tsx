@@ -11,7 +11,7 @@ export default function Home() {
         
         <Subtitle className="text-xl text-center">Powered by OpenAI</Subtitle>
 
-        <Divider className="my-10 bg-black" />
+        <Divider className="my-10 bg-gray-400" />
 
         <Card className="bg-gradient-to-br from-[#394F68] to-[#183B7E]">
           <CityPicker />
