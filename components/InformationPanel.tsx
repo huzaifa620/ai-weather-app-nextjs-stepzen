@@ -3,7 +3,6 @@ import Image from "next/image"
 import CityPicker from "./CityPicker"
 import weatherCodeToString from "@/lib/weatherCodeToStrings";
 
-
 type Props = {
     city: string;
     results: Root;
@@ -15,7 +14,7 @@ const InformationPanel = ({ city, lat, long, results }: Props) => {
   return (
     <div className="bg-gradient-to-br from-[#394F68] to-[#183B7E] text-white p-10">
 
-        <div className="pb-5">
+        <div className="pb-5 space-y-2">
             <h1 className="text-6xl font-bold"> { decodeURI(city) } </h1>
             <p className="text-xs text-gray-400"> Long/Lat: {long}, {lat} </p>
         </div>
@@ -72,7 +71,8 @@ const InformationPanel = ({ city, lat, long, results }: Props) => {
             </div>
         </div>
 
-        <div>
+        <div className="space-y-2 py-5">
+
             <div className="flex items-center space-x-2 px-4 py-3 border borer-[#6F90CD] rounded-md bg-[#405885]">
                 
                 <SunIcon className="h-10 w-10 text-gray-400" />
@@ -91,6 +91,26 @@ const InformationPanel = ({ city, lat, long, results }: Props) => {
                 </div>
 
             </div>
+
+            <div className="flex items-center space-x-2 px-4 py-3 border borer-[#6F90CD] rounded-md bg-[#405885]">
+                
+                <MoonIcon className="h-10 w-10 text-gray-400" />
+
+                <div className="flex-1 flex justify-between items-center">
+                    <p className="font-extralight"> Sunset </p>
+                    <p className="uppercase text-2xl"> 
+                        {
+                            new Date(results.daily.sunrise[0]).toLocaleTimeString("en-GB", {
+                                hour: "numeric",
+                                minute: "numeric",
+                                hour12: true,
+                            })
+                        }
+                    </p>
+                </div>
+
+            </div>
+
         </div>
 
     </div>
