@@ -1,0 +1,4 @@
+{
+  "endpoint": "api/nomadic-hamster",
+  "root": "stepzen/curl"
+}
