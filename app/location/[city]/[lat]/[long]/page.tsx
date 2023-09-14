@@ -6,7 +6,6 @@ import RainChart from "@/components/RainChart";
 import StatCard from "@/components/StatCard";
 import TempChart from "@/components/TempChart";
 import fetchWeatherQuery from "@/grapghql/queries/fetchWeatherQueries";
-import getBasePath from "@/lib/getBasePath";
 import cleanData from "@/lib/cleanData"
 
 export const revalidate = 60;
@@ -37,7 +36,7 @@ const WeatherPage = async ({ params: { city, lat, long } }: Props) => {
 
   const dataToSend = cleanData(results, city)
 
-  const res = await fetch(`${getBasePath()}/api/getWeatherSummary`, {
+  const res = await fetch(`${process.env.VERCEL_URL}/api/getWeatherSummary`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
