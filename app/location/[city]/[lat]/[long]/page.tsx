@@ -1,6 +1,8 @@
 import { getClient } from "@/apollo-client";
 import CalloutCard from "@/components/CalloutCard";
+import HumidityChart from "@/components/HumidityChart";
 import InformationPanel from "@/components/InformationPanel";
+import RainChart from "@/components/RainChart";
 import StatCard from "@/components/StatCard";
 import TempChart from "@/components/TempChart";
 import fetchWeatherQuery from "@/grapghql/queries/fetchWeatherQueries";
@@ -82,9 +84,13 @@ const WeatherPage = async ({ params: { city, lat, long } }: Props) => {
         </div>
         <hr className="mb-5" />
 
-        <div className="space-y-3">
+        <div className="space-y-6">
 
           <TempChart results={results} />
+
+          <RainChart results={results} />
+
+          <HumidityChart results={results} />
           
         </div>
       </div>
