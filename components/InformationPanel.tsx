@@ -24,7 +24,7 @@ const InformationPanel = ({ city, lat, long, results }: Props) => {
         <hr className="my-10" />
 
         <div className="mt-5 flex items-center justify-between space-x-10 mb-5">
-            <div>
+            <div className="flex flex-col">
 
                 <p className="text-xl">
                     {
@@ -40,7 +40,7 @@ const InformationPanel = ({ city, lat, long, results }: Props) => {
                 <p className="font-extralight"> Timezone: {Intl.DateTimeFormat().resolvedOptions().timeZone} </p>
             </div>
 
-            <p className="text-xl font-bold uppercase">
+            <p className="text-md font-bold uppercase">
                 {
                     new Date().toLocaleTimeString("en-GB", {
                         hour: "numeric",
@@ -60,7 +60,7 @@ const InformationPanel = ({ city, lat, long, results }: Props) => {
                 <Image src={`https://www.weatherbit.io/static/img/icons/${weatherCodeToString[results.current_weather.weathercode].icon}.png`} alt={weatherCodeToString[results.current_weather.weathercode].label} width={75} height={75} />
 
                 <div className="flex items-center justify-between space-x-10">
-                    <p className="text-6xl font-semibold">
+                    <p className="text-4xl md:text-6xl font-semibold">
                         {results.current_weather.temperature.toFixed(1)}{" "}°C
                     </p>
 
@@ -100,10 +100,11 @@ const InformationPanel = ({ city, lat, long, results }: Props) => {
                     <p className="font-extralight"> Sunset </p>
                     <p className="uppercase text-2xl"> 
                         {
-                            new Date(results.daily.sunrise[0]).toLocaleTimeString("en-GB", {
+                            new Date(results.daily.sunset[0]).toLocaleTimeString("en-GB", {
                                 hour: "numeric",
                                 minute: "numeric",
                                 hour12: true,
+                                timeZone: Intl.DateTimeFormat().resolvedOptions().timeZone
                             })
                         }
                     </p>

@@ -2,6 +2,7 @@ import { getClient } from "@/apollo-client";
 import CalloutCard from "@/components/CalloutCard";
 import InformationPanel from "@/components/InformationPanel";
 import StatCard from "@/components/StatCard";
+import TempChart from "@/components/TempChart";
 import fetchWeatherQuery from "@/grapghql/queries/fetchWeatherQueries";
 
 
@@ -56,33 +57,38 @@ const WeatherPage = async ({ params: { city, lat, long } }: Props) => {
 
           </div>
 
-          <div className="pb-5 m-2">
+          <div className="grid grid-cols-1 xl:grid-cols-2 gap-5 m-2">
 
-            <StatCard title="UV Index" metric={`${results.daily.uv_index_max[0].toFixed(1)}°`} color="rose" />
+            <div className="flex flex-col">
 
-            { Number(results.daily.uv_index_max[0].toFixed(1)) > 5 && (
-              <CalloutCard message="The UV is high today, be sure to wear SPF!" warning />
-            ) }
+              <StatCard title="UV Index" metric={`${results.daily.uv_index_max[0].toFixed(1)}°`} color="rose" />
+
+              { Number(results.daily.uv_index_max[0].toFixed(1)) > 5 && (
+                <CalloutCard message="The UV is high today, be sure to wear SPF!" warning />
+              ) }
+
+            </div>
+
+            <div className="flex flex-col xl:flex-row xl:space-x-3 space-y-3 xl:space-y-0">
+
+              <StatCard title="Wind Speed" metric={`${results.current_weather.windspeed.toFixed(1)} m/s`} color="cyan" />
+
+              <StatCard title="Wind Direction" metric={`${results.current_weather.winddirection.toFixed(1)}°`} color="violet" />
+
+            </div>
 
           </div>
 
-          <div className="flex space-x-3 m-2">
+        </div>
+        <hr className="mb-5" />
 
-            <StatCard title="Wind Speed" metric={`${results.current_weather.windspeed.toFixed(1)} m/s`} color="cyan" />
+        <div className="space-y-3">
 
-            <StatCard title="Wind Direction" metric={`${results.current_weather.winddirection.toFixed(1)}°`} color="violet" />
-
-          </div>
-
-
+          <TempChart results={results} />
+          
         </div>
       </div>
 
-      <hr className="mb-5" />
-
-      <div className="space-y-3">
-          
-      </div>
 
     </div>
   )
