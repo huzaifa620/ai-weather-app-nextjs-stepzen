@@ -7,7 +7,7 @@ export default function Home() {
 
       <Card className="max-w-4xl mx-auto bg-white rounded-2xl">
 
-        <Text className="text-7xl font-bold text-center mb-10">Weather AI</Text>
+        <Text className="text-5xl font-bold text-center mb-10">Weather AI</Text>
         
         <Subtitle className="text-xl text-center">Powered by OpenAI</Subtitle>
 
