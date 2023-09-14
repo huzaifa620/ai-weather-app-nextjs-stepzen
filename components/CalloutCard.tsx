@@ -10,7 +10,7 @@ type Props = {
 
 const CalloutCard = ( {message, warning}: Props ) => {
   return (
-    <Callout className="mt-4" title={message} icon={warning ? ExclamationIcon : CheckCircleIcon} color={warning ? "rose" : "teal"} />
+    <Callout className="mt-4 text-justify lg:px-4" title={message} icon={warning ? ExclamationIcon : CheckCircleIcon} color={warning ? "rose" : "teal"} />
   )
 }
 
