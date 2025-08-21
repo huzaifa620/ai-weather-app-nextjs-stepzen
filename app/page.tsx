@@ -11,16 +11,6 @@ export default function Home() {
     BASE_URL: process.env.BASE_URL,
   };
 
-  // Server-side console log (will not be sent to the client)
-  console.log("[ENV]", envs);
-
-  // Mask secret values for rendering in the UI
-  const mask = (val?: string | null) => {
-    if (!val) return "Not set";
-    const tail = val.slice(-4);
-    return `••••${tail}`;
-  };
-
   return (
     <div className="min-h-screen bg-gradient-to-br from-[#394F68] to-[#183B7E] p-10 flex flex-col justify-center items-center">
 
@@ -42,21 +32,21 @@ export default function Home() {
           <div className="mt-3 grid grid-cols-1 gap-2 text-sm">
             <div className="flex items-center justify-between">
               <span className="text-gray-600">OPENAI_API_KEY</span>
-              <span className="font-mono">{mask(envs.OPENAI_API_KEY)}</span>
+              <span className="font-mono">{envs.OPENAI_API_KEY}</span>
             </div>
             <div className="flex items-center justify-between">
               <span className="text-gray-600">STEPZEN_API_KEY</span>
-              <span className="font-mono">{mask(envs.STEPZEN_API_KEY)}</span>
+              <span className="font-mono">{envs.STEPZEN_API_KEY}</span>
             </div>
             <div className="flex items-center justify-between">
               <span className="text-gray-600">API_URL</span>
-              <span className="font-mono truncate max-w-[70%]" title={envs.API_URL || undefined}>
+              <span className="font-mono max-w-[70%]" title={envs.API_URL || undefined}>
                 {envs.API_URL || "Not set"}
               </span>
             </div>
             <div className="flex items-center justify-between">
               <span className="text-gray-600">BASE_URL</span>
-              <span className="font-mono truncate max-w-[70%]" title={envs.BASE_URL || undefined}>
+              <span className="font-mono max-w-[70%]" title={envs.BASE_URL || undefined}>
                 {envs.BASE_URL || "Not set"}
               </span>
             </div>
