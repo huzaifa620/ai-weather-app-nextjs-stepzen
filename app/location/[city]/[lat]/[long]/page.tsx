@@ -1,12 +1,10 @@
-import { getClient } from "@/apollo-client";
 import CalloutCard from "@/components/CalloutCard";
 import HumidityChart from "@/components/HumidityChart";
 import InformationPanel from "@/components/InformationPanel";
 import RainChart from "@/components/RainChart";
 import StatCard from "@/components/StatCard";
 import TempChart from "@/components/TempChart";
-import fetchWeatherQuery from "@/grapghql/queries/fetchWeatherQueries";
-import cleanData from "@/lib/cleanData"
+import cleanData from "@/lib/cleanData";
 
 export const revalidate = 60;
 
@@ -20,19 +18,19 @@ type Props = {
 
 const WeatherPage = async ({ params: { city, lat, long } }: Props) => {
 
-  const client = getClient();
+  // Directly fetch from Open-Meteo instead of using Apollo/StepZen
+  const url = `https://api.open-meteo.com/v1/forecast?latitude=${encodeURIComponent(
+    lat
+  )}&longitude=${encodeURIComponent(
+    long
+  )}&hourly=temperature_2m,relativehumidity_2m,apparent_temperature,precipitation,precipitation_probability,rain,showers,snowfall,snow_depth,windgusts_10m,uv_index,uv_index_clear_sky&daily=weathercode,temperature_2m_max,temperature_2m_min,apparent_temperature_max,apparent_temperature_min,sunrise,sunset,uv_index_max,uv_index_clear_sky_max&current_weather=true&timezone=GMT`;
 
-  const { data } = await client.query({
-    query: fetchWeatherQuery,
-    variables: {
-      current_weather: "true",
-      longitude: long,
-      latitude: lat,
-      timezone: 'GMT',
-    }
-  })
-  
-  const results: Root = data.myQuery;
+  const weatherRes = await fetch(url, { next: { revalidate: 60 } });
+  if (!weatherRes.ok) {
+    console.error("Open-Meteo fetch failed", weatherRes.status, weatherRes.statusText);
+    throw new Error("Failed to fetch weather data");
+  }
+  const results: Root = await weatherRes.json();
 
   const dataToSend = cleanData(results, city)
 

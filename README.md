@@ -1,58 +1,69 @@
-## Weather App AI — Next.js + StepZen + Apollo + OpenAI
+## AI Weather App — Next.js 13 + OpenAI + Open‑Meteo
 
-An AI-assisted weather dashboard built with Next.js 13 (App Router) and TypeScript. It fetches forecast data from Open‑Meteo via a StepZen GraphQL endpoint (queried with Apollo Client), then generates a friendly daily summary using OpenAI. Charts are rendered with Tremor and styled with Tailwind CSS.
+A modern, AI‑assisted weather dashboard built with Next.js 13 (App Router) and TypeScript. The app fetches forecast data directly from Open‑Meteo and uses OpenAI to generate a friendly daily summary. Responsive UI is styled with Tailwind CSS and visualized with Tremor charts.
 
-### Highlights
-- Next.js 13 App Router with TypeScript
-- StepZen REST-to-GraphQL schema for Open‑Meteo
-- Apollo Client for GraphQL queries
-- OpenAI for AI-written weather summaries
-- Tremor charts and responsive Tailwind UI
+### Features
+
+- Direct weather data from Open‑Meteo (no server token required)
+- AI‑written daily summary via OpenAI
+- Interactive charts (temperature, rain, humidity) using Tremor
+- City/latitude/longitude routing and a location picker
+- Fast, SSR/ISR rendering with Next.js 13
 
 ## Tech Stack
+
 - Next.js 13, React 18, TypeScript
-- Apollo Client, GraphQL
-- StepZen (GraphQL endpoint over Open‑Meteo)
 - OpenAI Node SDK
 - Tailwind CSS, @tremor/react, Heroicons
 
+Optional (legacy) integrations still present in the codebase:
+
+- StepZen + Apollo Client (GraphQL gateway over Open‑Meteo)
+
 ## Project Structure
+
 - `app/` — App Router pages and API routes
-	- `api/getWeatherSummary/route.ts` — Calls OpenAI to generate the daily summary
-	- `location/[city]/[lat]/[long]/page.tsx` — Fetches weather via Apollo and renders charts
+  - `api/getWeatherSummary/route.ts` — Calls OpenAI to generate a daily summary
+  - `location/[city]/[lat]/[long]/page.tsx` — Fetches Open‑Meteo directly and renders charts
 - `components/` — UI components and charts
-- `grapghql/queries/` — GraphQL query for weather data
-- `lib/` — Data shaping and utilities
-- `stepzen/` — StepZen schema files
-- `apollo-client.ts` — Apollo client configured with StepZen endpoint
+- `lib/` — Data shaping (`cleanData.ts`) and helpers
+- `stepzen/` — StepZen config and schema (optional/legacy)
+- `grapghql/queries/` — Legacy GraphQL query (unused if using direct fetch)
+- `apollo-client.ts` — Legacy Apollo client (unused by default)
 - `openai.ts` — OpenAI client initialization
 
 ## Prerequisites
-- Node.js 18+ and npm (or Yarn / pnpm)
-- Accounts/keys:
-	- OpenAI API key
-	- StepZen account and API key, plus a deployed endpoint
+
+- Node.js 18+
+- OpenAI API key
 
 ## Environment Variables
-Create a `.env` file in the project root (already added with placeholders). Update the values as needed:
+
+Create a `.env` file in the project root and set the following.
+
+Required:
 
 - `OPENAI_API_KEY` — Your OpenAI API key. Example: `sk-...`
-- `API_URL` — Your StepZen GraphQL endpoint URL. Example: `https://<username>.stepzen.net/api/nomadic-hamster/__graphql`
-- `STEPZEN_API_KEY` — Your StepZen API key used for the `Authorization` header.
-- `BASE_URL` — Base URL of your app, used to call the Next.js API route. Use `http://localhost:3000` in development, or your deployed URL on Vercel.
+- `BASE_URL` — Base URL of your app for calling the API route. Use `http://localhost:3000` in development.
 
-Example `.env` (placeholders):
+Optional (legacy StepZen/Apollo path):
+
+- `API_URL` — StepZen GraphQL endpoint URL, e.g., `https://<user>.stepzen.net/api/<endpoint>/__graphql`
+- `STEPZEN_API_KEY` — StepZen API key for the `Authorization` header
+
+Example `.env`:
 
 ```
 OPENAI_API_KEY=sk-your-openai-api-key
-API_URL=https://your-username.stepzen.net/api/nomadic-hamster/__graphql
-STEPZEN_API_KEY=your-stepzen-api-key
 BASE_URL=http://localhost:3000
+
+# Optional: only if you switch back to StepZen/Apollo
+# API_URL=https://your-username.stepzen.net/api/nomadic-hamster/__graphql
+# STEPZEN_API_KEY=your-stepzen-api-key
 ```
 
-Note: Next.js also supports `.env.local`; you can move secrets there if you prefer not to commit `.env`.
-
 ## Getting Started
+
 Install dependencies:
 
 ```
@@ -65,32 +76,16 @@ Run the development server:
 npm run dev
 ```
 
-Open http://localhost:3000 to view the app.
+Open http://localhost:3000 in your browser.
 
 ## How It Works
-1. The client-side page at `app/location/[city]/[lat]/[long]/page.tsx` uses Apollo Client to query your StepZen endpoint for weather data from Open‑Meteo.
-2. The results are shaped via `lib/cleanData.ts` and sent to the API route `app/api/getWeatherSummary/route.ts`.
-3. The API route calls OpenAI to generate a human-friendly summary/joke and returns the message for display.
 
-## Deployment
-Deploy on Vercel (recommended). Set these environment variables in your project settings:
-- `OPENAI_API_KEY`
-- `API_URL`
-- `STEPZEN_API_KEY`
-- `BASE_URL` (e.g., `https://your-app.vercel.app`)
-
-## Troubleshooting
-- 401 from StepZen: Verify `API_URL` and `STEPZEN_API_KEY` and ensure `Authorization: apikey <key>` header is accepted by your endpoint.
-- OpenAI errors: Ensure `OPENAI_API_KEY` is valid and the selected model (e.g., `gpt-3.5-turbo`) is available to your account.
-- Empty charts: Check the StepZen schema and query variables (lat/long/timezone) and confirm Open‑Meteo is returning data.
-
-## Scripts
-- `npm run dev` — Start dev server
-- `npm run build` — Build for production
-- `npm run start` — Start production server
-- `npm run lint` — Lint the codebase
+1. The dynamic page at `app/location/[city]/[lat]/[long]/page.tsx` fetches forecast data directly from Open‑Meteo using the provided lat/long and a fixed set of hourly/daily fields. The request uses Next.js fetch caching with `revalidate: 60`.
+2. The result is shaped via `lib/cleanData.ts` for charts and display.
+3. The shaped data is posted to `app/api/getWeatherSummary/route.ts`, which calls OpenAI to produce a concise, friendly summary.
+4. The UI renders stats, charts, and the AI message.
 
 ## Acknowledgements
+
 - Weather data: Open‑Meteo
-- GraphQL gateway: StepZen
 - Charts: Tremor

@@ -10,8 +10,7 @@ export async function POST(request: Request) {
     const { weatherData } = await request.json();
 
     const response = await openai.chat.completions.create({
-        model: 'gpt-3.5-turbo',
-        temperature: 0.8,
+        model: 'gpt-5-nano',
         n: 1,
         stream: false,
         messages: [
